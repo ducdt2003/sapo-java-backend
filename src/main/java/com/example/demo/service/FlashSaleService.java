@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.FlashSaleOrderRequest;
+import com.example.demo.dto.FlashSaleProductDTO;
+import com.example.demo.request.FlashSaleOrderRequest;
 import com.example.demo.entity.FlashSaleOrder;
 import com.example.demo.entity.Product;
 import com.example.demo.repository.FlashSaleOrderRepository;
@@ -68,7 +69,20 @@ public class FlashSaleService {
         return "Đặt hàng thành công";
     }
 
-    public Page<Product> getFlashSaleProducts(Pageable pageable) {
-        return productRepository.findByFlashSaleTrue(pageable);
+    public List<FlashSaleProductDTO> getFlashSaleProducts() {
+
+        List<Product> products = productRepository.findByFlashSaleTrue();
+
+        return products.stream().map(p -> {
+            FlashSaleProductDTO dto = new FlashSaleProductDTO();
+
+            dto.setId(p.getId());
+            dto.setName(p.getName());
+            dto.setOriginalPrice(p.getPrice());
+            dto.setFlashSalePrice(p.getPrice() * 0.5);
+            dto.setStock(p.getStock());
+
+            return dto;
+        }).toList();
     }
 }

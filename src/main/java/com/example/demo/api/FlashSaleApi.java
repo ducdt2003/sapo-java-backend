@@ -1,7 +1,8 @@
 package com.example.demo.api;
 
 import com.example.demo.Response.ApiResponse;
-import com.example.demo.dto.FlashSaleOrderRequest;
+import com.example.demo.dto.FlashSaleProductDTO;
+import com.example.demo.request.FlashSaleOrderRequest;
 import com.example.demo.entity.Product;
 import com.example.demo.service.FlashSaleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/flash-sale")
@@ -18,11 +21,10 @@ public class FlashSaleApi {
     private FlashSaleService flashSaleService;
 
     @GetMapping("/products")
-    public ResponseEntity<?> flashSalePage(
-            @RequestParam(defaultValue = "0") int page) {
+    public ResponseEntity<?> flashSalePage() {
 
-        Page<Product> productPage =
-                flashSaleService.getFlashSaleProducts(PageRequest.of(page, 12));
+        List<FlashSaleProductDTO> productPage =
+                flashSaleService.getFlashSaleProducts();
 
         return ResponseEntity.ok(productPage);
     }
